@@ -1,0 +1,76 @@
+/* 🌤 White background and clean layout */
+body {
+  background: #ffffff;
+  color: #111;
+  font-family: "Segoe UI", Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+#viz {
+  position: absolute;
+  top: 10vh;    /* ⬅ leaves 1/10 of the viewport height as space above */
+  left: 0;
+  width: 20vw;  /* 1/5 of page width */
+  height: 33vh; /* 1/3 of page height */
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: none;
+  overflow: hidden;
+  box-shadow: 0 0 8px rgba(0,0,0,0.15);
+}
+
+
+
+/* ✅ Generic shape appearance — no enforced colors */
+path.shape,
+polygon.shape,
+polyline.shape {
+  stroke-width: 1px;
+  stroke: #555;
+  fill-opacity: 1;
+  transition: all 0.2s ease-in-out;
+}
+
+/* ❌ No color or fill declarations here — D3 controls those */
+path.shape:hover,
+polygon.shape:hover,
+polyline.shape:hover {
+  cursor: pointer;
+  filter: brightness(1.05);
+}
+
+/* 🧠 Tooltip styling */
+.tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 6px;
+  pointer-events: none;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Optional: nice drop shadow around SVG container */
+svg {
+  display: block;
+  margin: auto;
+  background: transparent;
+}
+.shape {
+  stroke: #555;
+  stroke-width: 0.6px;
+  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+/* Hover state — dark blue outline */
+.shape.hover-outline {
+  stroke: #0D47A1 !important;   /* dark blue */
+  stroke-width: 1.8px !important;
+}
