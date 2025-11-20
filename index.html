@@ -2,13 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Body Shapes Viewer</title>
+  <title>Mortality Analyzer</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <h2> Morailty Analyzer </h2>
-  <div id="viz"></div>
+
+  <h1 class="page-title">Mortality Analyzer</h1>
+
+  <div class="dashboard">
+
+      <!---------------- LEFT PANEL ---------------->
+      <div class="left-panel">
+        <div id="viz" class="card body-card"></div>
+      </div>
+
+      <!---------------- RIGHT PANEL ---------------->
+      <div class="right-panel">
+
+          <!-- TOP HALF (Reserved for USA MAP) -->
+          <div id="us-map" class="card map-card">
+              <p style="text-align:center; margin-top:40px; color:#aaa;">
+                <i>USA map will be displayed here...</i>
+              </p>
+          </div>
+
+          <!-- BOTTOM HALF: TWO CHARTS -->
+          <div class="charts-bottom">
+              <div id="chart1" class="card chart-card"></div>
+              <div id="chart2" class="card chart-card"></div>
+          </div>
+
+      </div>
+
+  </div>
+
   <script src="script.js"></script>
+
 </body>
 </html>
