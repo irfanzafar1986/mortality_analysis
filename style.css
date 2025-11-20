@@ -2,8 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f7fa;
+    overflow-x: hidden;       /* optional safety net */
 }
 
 /* ---------- TITLE ---------- */
@@ -22,20 +21,45 @@ body {
     height: calc(100vh - 100px);
     gap: 20px;
     padding: 0 20px;
+    box-sizing: border-box;   /* NEW: prevents width > viewport */
 }
 
 /* Left panel = Body map */
 .left-panel {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: stretch;   /* was flex-start */
+    height: 100%;
+}
+/* Right panel = Map (top) + charts (bottom) */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;         /* match .dashboard column height */
+}
+.map-card {
+    width: 100%;
+    height: 100%;
+    flex: 1;              /* take half of right-panel height */
 }
 
-/* Right panel = USA map + charts */
-.right-panel {
+.charts-bottom {
     display: grid;
-    grid-template-rows: 50% 50%;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
+    flex: 1;              /* take the other half */
+}
+
+.chart-card {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.body-card {
+    width: 100%;            /* fill the 450px grid column */
+    height: 100%;           /* fill full column height */
 }
 
 /* ---------- CARD STYLING ---------- */
@@ -48,9 +72,14 @@ body {
 
 /* Special larger cards */
 .body-card {
-    width: 420px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
 }
+#viz {
+    width: 100%;
+    height: 100%;
+}
+
 
 .map-card {
     width: 100%;
@@ -58,9 +87,16 @@ body {
 }
 
 .chart-card {
+    display: block;
     width: 100%;
     height: 100%;
 }
+.chart-card svg {
+    width: 100%;
+    height: 100%;
+    display: block;   /* removes inline SVG extra gap */
+}
+
 
 /* ---------- CHARTS BOTTOM GRID ---------- */
 .charts-bottom {

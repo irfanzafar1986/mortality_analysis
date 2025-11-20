@@ -228,8 +228,33 @@ Promise.all([
     // =======================================
     // FIT SVG TO BODY OUTLINE
     // =======================================
-    const b = g.node().getBBox(), m = 20;
-    svg.attr("viewBox", [b.x - m, b.y - m, b.width + 2*m, b.height + 2*m]);
+    // =======================================
+// SCALE & CENTER BODY TO FILL CONTAINER
+// =======================================
+function resizeBody() {
+    const node = container.node();
+    const width  = node.clientWidth;
+    const height = node.clientHeight;
+    if (!width || !height) return;
+
+    const bbox = g.node().getBBox();
+    const padding = 20;
+
+    const scale = Math.min(
+        (width  - 2 * padding) / bbox.width,
+        (height - 2 * padding) / bbox.height
+    );
+
+    const tx = (width  - bbox.width  * scale) / 2 - bbox.x * scale;
+    const ty = (height - bbox.height * scale) / 2 - bbox.y * scale;
+
+    g.attr("transform", `translate(${tx},${ty}) scale(${scale})`);
+}
+
+resizeBody();
+window.addEventListener("resize", resizeBody);
+
+
 
     // =======================================
     // CHART CONTAINERS
@@ -279,8 +304,9 @@ Promise.all([
             })
         }));
 
-        const c1Width = 380;
-        const c1Height = 220;
+        const c1Width  = chart1Container.node().clientWidth  || 380;
+        const c1Height = chart1Container.node().clientHeight || 220;
+
         const margin1 = { top: 30, right: 20, bottom: 40, left: 50 };
 
         const svg1 = chart1Container.append("svg")
@@ -306,6 +332,27 @@ Promise.all([
         const colorSex = d3.scaleOrdinal()
             .domain(sexes)
             .range(["#3498DB", "#E91E63"]);
+        // Legend for line chart (Male vs Female)
+const legend1 = svg1.append("g")
+    .attr("transform", `translate(${c1Width - margin1.right - 90}, ${margin1.top})`);
+
+sexes.forEach((sex, i) => {
+    const gLeg = legend1.append("g")
+        .attr("transform", `translate(0, ${i * 18})`);
+
+    gLeg.append("rect")
+        .attr("width", 12)
+        .attr("height", 12)
+        .attr("fill", colorSex(sex));
+
+    gLeg.append("text")
+        .attr("x", 18)
+        .attr("y", 10)
+        .style("font-family", "Arial")
+        .style("font-size", "11px")
+        .text(sex);
+});
+
 
         const lineGen = d3.line()
             .defined(d => d.value != null)
@@ -342,13 +389,15 @@ Promise.all([
                 .on("mouseout", () => tooltip.style("opacity", 0));
         });
 
-        svg1.append("text")
-            .attr("x", c1Width / 2)
-            .attr("y", margin1.top - 10)
-            .attr("text-anchor", "middle")
-            .style("font-family", "Arial")
-            .style("font-size", "13px")
-            .text(`${organLabel} — Male vs Female (Yearly)`);
+       svg1.append("text")
+    .attr("x", c1Width / 2)
+    .attr("y", margin1.top - 10)
+    .attr("text-anchor", "middle")
+    .style("font-family", "Arial")
+    .style("font-size", "13px")
+    .style("font-weight", "bold")
+    .text(`${organLabel} — Male vs Female (Yearly)`);
+
 
         // =======================================
         // CHART 2 — CLEAN STACKED BAR CHART
@@ -364,8 +413,8 @@ Promise.all([
             return row;
         });
 
-        const c2Width = 400;
-        const c2Height = 260;
+        const c2Width  = chart2Container.node().clientWidth  || 400;
+        const c2Height = chart2Container.node().clientHeight || 260;
         const margin2 = { top: 30, right: 20, bottom: 60, left: 50 };
 
         const svg2 = chart2Container.append("svg")
@@ -385,8 +434,9 @@ Promise.all([
             .range([c2Height - margin2.bottom, margin2.top]);
 
         const colorAge = d3.scaleOrdinal()
-            .domain(ageGroups)
-            .range(["#1B2A41", "#B10F2E", "#E63C44", "#FF5C5C"]);
+    .domain(ageGroups)
+    .range(["#0D47A1", "#1976D2", "#42A5F5", "#90CAF9"]);
+
 
         const stack = d3.stack().keys(ageGroups);
         const seriesStack = stack(stacked);
@@ -428,12 +478,14 @@ Promise.all([
             .call(d3.axisLeft(yStack).tickFormat(d => d + "%"));
 
         svg2.append("text")
-            .attr("x", c2Width / 2)
-            .attr("y", margin2.top - 10)
-            .attr("text-anchor", "middle")
-            .style("font-family", "Arial")
-            .style("font-size", "13px")
-            .text(`${organLabel} — Age Groups Stacked (Yearly)`);
+    .attr("x", c2Width / 2)
+    .attr("y", margin2.top - 10)
+    .attr("text-anchor", "middle")
+    .style("font-family", "Arial")
+    .style("font-size", "13px")
+    .style("font-weight", "bold")
+    .text(`${organLabel} — Age Groups Stacked (Yearly)`);
+
 
         const legend2 = svg2.append("g")
             .attr("transform", `translate(${c2Width - margin2.right - 110},${margin2.top})`);
